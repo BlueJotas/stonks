@@ -1,4 +1,7 @@
 # Byte-compiled / optimized / DLL files
+# Custom
+.Stonks.jpg
+
 __pycache__/
 *.py[cod]
 *$py.class
