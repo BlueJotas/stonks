@@ -3,5 +3,6 @@
 ![](/Stonks.jpg)
 
 1 - ¿Qué es un stock de bolsa?
-2 - ¿Qué es el RSI? ¿Cuales son sus dos formas de calcularlo en nuestro predictor?
+2 - ¿Qué es el RSI? ¿Cómo se calcula?
 3 - ¿Cómo funciona nuestro programa y qué te ofrece?
+4 - Capacidades de mejora: Resto de sectores, Sentiment Analysis.

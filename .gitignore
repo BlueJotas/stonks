@@ -1,6 +1,7 @@
 # Byte-compiled / optimized / DLL files
 # Custom
 Stonks.jpg
+.DS_Store
 
 __pycache__/
 *.py[cod]
