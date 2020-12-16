@@ -34,15 +34,27 @@ def update_timeseries(selected_dropdown_value):
         # STEP 1
     df_sub, p = data_model(str(selected_dropdown_value).strip("'[]'"))
     # STEP 2
+    trace = []
     # Draw and append traces for each stock
-    data = [go.Scatter(x=df_sub['Date'],
-                                y=df_sub['Price'],
-                                name=selected_dropdown_value,
-                                showlegend=True,
-                                fill='tozeroy',
-                                mode='lines',
-                                opacity=0.7,
-                                textposition='bottom center')]
+    trace.append(go.Scatter(x=df_sub['Date'],
+                           y=df_sub['Price'],
+                           name=selected_dropdown_value,
+                           showlegend=True,
+                           fill='tozeroy',
+                           mode='lines',
+                           opacity=0.7,
+                           textposition='bottom center'))
+
+    trace.append(go.Scatter(x=df_sub['Date'],
+                           y=df_sub['EWMA'],
+                           name='EWMA',
+                           showlegend=True,
+                           mode='lines',
+                           opacity=0.7,
+                           textposition='bottom center'))
+
+    traces = [trace]
+    data = [val for sublist in traces for val in sublist]
 
     # Define Figure
     figure = {'data': data,
@@ -70,19 +82,20 @@ def update_change(selected_dropdown_value):
     trace = []
     # Draw and append traces for each stock
     trace.append(go.Scatter(x=df_sub['Date'],
-                                 y=df_sub['RSI'],
-                                 name='RSI',
-                                 showlegend=True,
-                                 mode='lines',
-                                 opacity=0.7,
-                                 textposition='bottom center'))
+                             y=df_sub['RSI'],
+                             name='RSI',
+                             showlegend=True,
+                             mode='lines',
+                             opacity=0.7,
+                             textposition='bottom center'))
 
-    fig = px.scatter(x=df_sub['Date'],
-                     y=df_sub['RSI'],)
+    trace.append(go.Scatter(x=df_sub['Date'], y=[30 for i in range(len(df_sub['Date']))],
+                            name='Buy signal', hoverinfo='skip', opacity=0.7
+                            ))
 
-    fig.add_hline(y=30, line_width=3, line_color='green', line_dash='dash')
-
-    trace.append(fig)
+    trace.append(go.Scatter(x=df_sub['Date'], y=[70 for i in range(len(df_sub['Date']))],
+                            name='Sell signal', hoverinfo='skip', opacity=0.7
+                            ))
 
     traces = [trace]
     data = [val for sublist in traces for val in sublist]
@@ -91,7 +104,7 @@ def update_change(selected_dropdown_value):
     # Define Figure
     figure = {'data': data,
               'layout': go.Layout(
-                          colorway=['#FFAA27', '#FF4F00', '#375CB1', '#FF7400', '#FFF400', '#FF0056'],
+                          colorway=['#FFAA27', '#47ED60', '#ED4777'],
                           template='plotly_dark',
                           paper_bgcolor='rgba(0, 0, 0, 0)',
                           plot_bgcolor='rgba(0, 0, 0, 0)',
@@ -114,7 +127,8 @@ app.layout = html.Div(children=[
                                   html.Div(className='four columns div-user-controls', children = [
                                             html.H2('STOCK PRICES SELECTION'),
                                             html.P('''Choose any stock to see its historic price'''),
-                                            html.P('''You will be able to visualize the stock price and its RSI'''),
+                                            html.P('''When the RSI is above the red line, it is considered overbought, when
+                                                   it is below the green line, it is considered oversold.'''),
                                             html.Div(className='div-for-dropdown',
                                                      children=[
                                                      dcc.Dropdown(id='stockselector',
